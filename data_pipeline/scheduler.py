@@ -1,5 +1,5 @@
 import time
-from fetch_news import fetch_news
+import fetch_news
 
 def run():
     while True:
