@@ -3,7 +3,7 @@ from transformers import pipeline
 
 @st.cache_resource
 def get_model():
-    return pipeline("sentiment-analysis", model="ProsusAI/finbert")
+    return pipeline("sentiment-analysis", model="ProsusAI/finbert", trust_remote_code=True)
 
 def analyze_headlines(headlines):
     if not headlines: return 0.0

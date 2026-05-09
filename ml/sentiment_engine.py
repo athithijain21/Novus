@@ -22,7 +22,7 @@ from datetime import datetime, timedelta
 try:
     import pandas as pd
     import torch
-    from transformers import AutoModelForSequenceClassification, AutoTokenizer, pipeline
+    from transformers import AutoConfig, AutoModelForSequenceClassification, AutoTokenizer, pipeline
 except ImportError as e:
     raise ImportError(
         "[ERROR] Missing dependencies. Run:\n"
@@ -91,8 +91,13 @@ class SentimentEngine:
     def _load_model(self) -> None:
         _log(f"Loading {MODEL_NAME} … (this may take a moment)")
         try:
-            tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-            model     = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
+            config    = AutoConfig.from_pretrained(MODEL_NAME, trust_remote_code=True)
+            tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, trust_remote_code=True)
+            model     = AutoModelForSequenceClassification.from_pretrained(
+                MODEL_NAME,
+                config=config,
+                trust_remote_code=True,
+            )
             device    = 0 if torch.cuda.is_available() else -1  # GPU if available
             self._pipe = pipeline(
                 task="text-classification",
